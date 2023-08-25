@@ -5,6 +5,7 @@ using UnityEngine;
 public class GroundCheck : MonoBehaviour
 {
     public int nJumping;
+    public bool isGround;
 
 
     void OnTriggerEnter2D(Collider2D other)
@@ -12,6 +13,15 @@ public class GroundCheck : MonoBehaviour
         if (other.gameObject.layer == 6)
         {
             nJumping = 2;
+            isGround = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.layer == 6)
+        {
+            isGround = false;
         }
     }
 }
