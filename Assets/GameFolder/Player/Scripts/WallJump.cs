@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class WallJump : MonoBehaviour
 {
-    public  static bool onWall;
-    [SerializeField] private bool rightWall,leftWall;
-    [SerializeField] private Vector3 wallOffset; 
+    public static bool onWall;
+    [SerializeField] private bool rightWall, leftWall;
+    [SerializeField] private Vector3 wallOffset;
     [SerializeField] private float wallradius;
     [SerializeField] private LayerMask walllayer;
     [SerializeField] private PlayerController player;
@@ -15,7 +15,7 @@ public class WallJump : MonoBehaviour
     public float speedJumpWall;
     public bool wallJumping;
     public float wallJumpTime;
-    public float xWallForce,yWallForce;
+    public float xWallForce, yWallForce;
     public static bool isSliding;
 
 
@@ -26,7 +26,7 @@ public class WallJump : MonoBehaviour
 
     void Update()
     {
-        rightWall = Physics2D.OverlapCircle(transform.position + new Vector3(wallOffset.x,0f),wallradius,walllayer);
+        rightWall = Physics2D.OverlapCircle(transform.position + new Vector3(wallOffset.x, 0f), wallradius, walllayer);
         leftWall = Physics2D.OverlapCircle(transform.position + new Vector3(-wallOffset.x, 0f), wallradius, walllayer);
 
         if (rightWall || leftWall)
@@ -39,11 +39,17 @@ public class WallJump : MonoBehaviour
         }
 
         WallJumpp();
+
+        //if (Input.GetKeyDown(KeyCode.Space) && wallJumping)
+        //{
+        //    player.rb.AddForce(new Vector2(2000f * -player.direcao, yWallForce), ForceMode2D.Force);
+        //}
+
     }
 
     void WallJumpp()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0 && onWall == true && player.gc.isGround == false)
+        if (onWall == true && player.gc.isGround == false)
         {
             isSliding = true;
             player.rb.velocity = new Vector2(player.rb.velocity.x, Mathf.Clamp(player.rb.velocity.y, -speedJumpWall, float.MaxValue));
@@ -59,9 +65,9 @@ public class WallJump : MonoBehaviour
             Invoke("SetWallJumpingFalse", wallJumpTime);
         }
 
-        if (wallJumping == true)
+        if (wallJumping)
         {
-            player.rb.velocity = new Vector2(-player.direcao * xWallForce, yWallForce);
+            player.rb.AddForce(new Vector2(xWallForce * -player.direcao, yWallForce), ForceMode2D.Force);
         }
     }
 
@@ -73,7 +79,7 @@ public class WallJump : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(wallOffset.x, 0f),wallradius);
+        Gizmos.DrawWireSphere(transform.position + new Vector3(wallOffset.x, 0f), wallradius);
         Gizmos.DrawWireSphere(transform.position + new Vector3(-wallOffset.x, 0f), wallradius);
     }
 }

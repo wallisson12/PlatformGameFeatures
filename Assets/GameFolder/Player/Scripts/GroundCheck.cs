@@ -12,7 +12,7 @@ public class GroundCheck : MonoBehaviour
     {
         if (other.gameObject.layer == 6)
         {
-            nJumping = 2;
+            nJumping = 1;
             isGround = true;
         }
     }
