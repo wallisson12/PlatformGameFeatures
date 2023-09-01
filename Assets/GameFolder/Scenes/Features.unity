@@ -287,7 +287,7 @@ MonoBehaviour:
   rightWall: 0
   leftWall: 0
   wallOffset: {x: 0.5, y: 0, z: 0}
-  wallradius: 0.35
+  wallradius: 0.3
   walllayer:
     serializedVersion: 2
     m_Bits: 128
@@ -295,7 +295,7 @@ MonoBehaviour:
   speedJumpWall: 3
   wallJumping: 0
   wallJumpTime: 0.1
-  xWallForce: 140
+  xWallForce: 50
   yWallForce: 35
 --- !u!114 &10824366
 MonoBehaviour:
@@ -309,6 +309,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c117cbc89de2d2840903a5dd426b1c64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dashingVelocity: 35
+  _dashDuration: 0.5
+  _dashTime: 0
+  _dashValue: 1
+  _canDash: 0
+  p: {fileID: 0}
 --- !u!1 &36016006
 GameObject:
   m_ObjectHideFlags: 0
