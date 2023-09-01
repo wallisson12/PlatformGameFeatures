@@ -40,11 +40,6 @@ public class WallJump : MonoBehaviour
 
         WallJumpp();
 
-        //if (Input.GetKeyDown(KeyCode.Space) && wallJumping)
-        //{
-        //    player.rb.AddForce(new Vector2(2000f * -player.direcao, yWallForce), ForceMode2D.Force);
-        //}
-
     }
 
     void WallJumpp()
@@ -61,13 +56,14 @@ public class WallJump : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && isSliding)
         {
+            player.rb.velocity = Vector2.zero;
             wallJumping = true;
             Invoke("SetWallJumpingFalse", wallJumpTime);
         }
 
         if (wallJumping)
         {
-            player.rb.AddForce(new Vector2(xWallForce * -player.direcao, yWallForce), ForceMode2D.Force);
+            player.rb.AddForce(new Vector2(xWallForce * -player.direcao, yWallForce));
         }
     }
 

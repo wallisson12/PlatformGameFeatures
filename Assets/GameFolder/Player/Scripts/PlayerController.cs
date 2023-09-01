@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     public GroundCheck gc;
     [SerializeField] private float speed, forceJ, jumpHeight;
-    [SerializeField] private float gravityScale;
+    public float gravityScale;
     [SerializeField] private float fallGravityScale;
 
     [Header("Direcao")]
@@ -34,8 +34,11 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        float mX = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(mX * speed, rb.velocity.y);
+        if (Dash._isDashing == false)
+        {
+            float mX = Input.GetAxisRaw("Horizontal");
+            rb.velocity = new Vector2(mX * speed, rb.velocity.y);
+        }
     }
 
     void Jump()
@@ -58,11 +61,11 @@ public class PlayerController : MonoBehaviour
         }
 
         //More gravity on the jump fall and WallJump
-        if (rb.velocity.y > 0)
+        if (rb.velocity.y > 0 && Dash._isDashing == false)
         {
             rb.gravityScale = gravityScale;
         }
-        else
+        else if(rb.velocity.y < 0 && Dash._isDashing == false)
         {
             rb.gravityScale = fallGravityScale;
         }
@@ -70,19 +73,22 @@ public class PlayerController : MonoBehaviour
 
     void Flip()
     {
-        if (Input.GetAxisRaw("Horizontal") == 1)
+        if (Dash._isDashing == false)
         {
-            direcao = 1;
-            Vector3 scale = transform.localScale;
-            scale.x = direcao;
-            transform.localScale = scale;
-        }
-        else if (Input.GetAxisRaw("Horizontal") == -1)
-        {
-            direcao = -1;
-            Vector3 scale = transform.localScale;
-            scale.x = direcao;
-            transform.localScale = scale;
+            if (Input.GetAxisRaw("Horizontal") == 1)
+            {
+                direcao = 1;
+                Vector3 scale = transform.localScale;
+                scale.x = direcao;
+                transform.localScale = scale;
+            }
+            else if (Input.GetAxisRaw("Horizontal") == -1)
+            {
+                direcao = -1;
+                Vector3 scale = transform.localScale;
+                scale.x = direcao;
+                transform.localScale = scale;
+            }
         }
     }
 }
