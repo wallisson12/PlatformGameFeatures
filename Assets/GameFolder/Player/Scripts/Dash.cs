@@ -42,6 +42,7 @@ public class Dash : MonoBehaviour
             _dashTime = 0f;
             p.rb.gravityScale = 0f;
             p.rb.velocity = Vector2.zero;
+            p.anim.Play("Dash_Animation");
             _isDashing = true;
             _canDash = false;
             Invoke("SetDashingFalse", _dashDuration);

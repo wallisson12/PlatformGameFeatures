@@ -6,7 +6,7 @@ public class WallJump : MonoBehaviour
 {
     public static bool onWall;
     [SerializeField] private bool rightWall, leftWall;
-    [SerializeField] private Vector3 wallOffset;
+    [SerializeField] private Vector3 wallOffset1, wallOffset2;
     [SerializeField] private float wallradius;
     [SerializeField] private LayerMask walllayer;
     [SerializeField] private PlayerController player;
@@ -26,8 +26,8 @@ public class WallJump : MonoBehaviour
 
     void Update()
     {
-        rightWall = Physics2D.OverlapCircle(transform.position + new Vector3(wallOffset.x, 0f), wallradius, walllayer);
-        leftWall = Physics2D.OverlapCircle(transform.position + new Vector3(-wallOffset.x, 0f), wallradius, walllayer);
+        rightWall = Physics2D.OverlapCircle(transform.position + new Vector3(wallOffset1.x, 0f), wallradius, walllayer);
+        leftWall = Physics2D.OverlapCircle(transform.position + new Vector3(-wallOffset2.x, 0f), wallradius, walllayer);
 
         if (rightWall || leftWall)
         {
@@ -53,6 +53,7 @@ public class WallJump : MonoBehaviour
         {
             isSliding = false;
         }
+        
 
         if (Input.GetKeyDown(KeyCode.Space) && isSliding)
         {
@@ -75,7 +76,7 @@ public class WallJump : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(wallOffset.x, 0f), wallradius);
-        Gizmos.DrawWireSphere(transform.position + new Vector3(-wallOffset.x, 0f), wallradius);
+        Gizmos.DrawWireSphere(transform.position + new Vector3(wallOffset1.x, 0f), wallradius);
+        Gizmos.DrawWireSphere(transform.position + new Vector3(-wallOffset2.x, 0f), wallradius);
     }
 }
