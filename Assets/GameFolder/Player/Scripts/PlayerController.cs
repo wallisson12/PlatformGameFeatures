@@ -19,6 +19,12 @@ public class PlayerController : MonoBehaviour
     [Header("Direcao")]
     public float direcao;
 
+    [Header("Ladders")]
+    [SerializeField] private LayerMask layerLadders;
+    [SerializeField] private float distanceRayLa;
+    [SerializeField] private bool isClimbing;
+    [SerializeField] private float speedY;
+
     void Start()
     {
         
@@ -35,6 +41,7 @@ public class PlayerController : MonoBehaviour
         //New Input system
         Jump();
         Flip();
+        Ladders();
     }
 
     void Movement()
@@ -124,7 +131,7 @@ public class PlayerController : MonoBehaviour
 
     void Flip()
     {
-        if (Dash._isDashing == false)
+        if (Dash._isDashing == false && WallJump.isSliding == false)
         {
             if (Input.GetAxisRaw("Horizontal") == 1)
             {
@@ -146,5 +153,44 @@ public class PlayerController : MonoBehaviour
                 skin.transform.localScale = new Vector3(direcao, skin.transform.localScale.y, skin.transform.localScale.z);
             }
         }
+    }
+
+    void Ladders()
+    {
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position,Vector2.up,distanceRayLa,layerLadders);
+
+        if (hitInfo.collider  != null)
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                isClimbing = true;
+
+            }else if (Input.GetAxisRaw("Horizontal") != 0)
+            {
+                isClimbing = false;
+            }
+
+        }
+        else
+        {
+            isClimbing = false;
+        }
+
+        if (isClimbing && hitInfo.collider != null)
+        {
+            float moveY = Input.GetAxisRaw("Vertical");
+            rb.velocity = new Vector2(rb.velocity.x,moveY *speedY);
+            rb.gravityScale = 0f;
+        }
+        else
+        {
+            rb.gravityScale = gravityScale;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, Vector2.up * distanceRayLa);
     }
 }
