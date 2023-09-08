@@ -77,13 +77,13 @@ public class PlayerController : MonoBehaviour
 
         if (!gc.isGround)
         {
-            if (!WallJump.isSliding && rb.velocity.y > 0)
+            if (!WallJump.isSliding && !isClimbing && rb.velocity.y > 0)
             {
                 anim.SetBool("isJumping", true);
                 anim.SetBool("isFall", false);
                 anim.SetBool("isSlider", false);
             }
-            else if(!WallJump.isSliding && rb.velocity.y < 0)
+            else if(!WallJump.isSliding && !isClimbing && rb.velocity.y < 0)
             {
                
                 anim.SetBool("isJumping", false);
@@ -179,6 +179,9 @@ public class PlayerController : MonoBehaviour
         if (isClimbing && hitInfo.collider != null)
         {
             float moveY = Input.GetAxisRaw("Vertical");
+            anim.Play("Ladders_Animation");
+            anim.SetBool("isJumping", false);
+            anim.SetBool("isFall", false);
             rb.velocity = new Vector2(rb.velocity.x,moveY *speedY);
             rb.gravityScale = 0f;
         }
