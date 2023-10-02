@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && gc.nJumping > 0 && WallJump.isSliding == false && Dash._isDashing == false)
         {
             gc.nJumping--;
+            gc.isJumping = true;
             rb.gravityScale = gravityScale;
             rb.velocity = new Vector2(rb.velocity.x, 0f);
             //Varies the force of the jump taking into the account height,mass,gravity of the world and the player
@@ -77,13 +78,13 @@ public class PlayerController : MonoBehaviour
 
         if (!gc.isGround)
         {
-            if (!WallJump.isSliding && rb.velocity.y > 0)
+            if (!WallJump.isSliding && !isClimbing && rb.velocity.y > 0)
             {
                 anim.SetBool("isJumping", true);
                 anim.SetBool("isFall", false);
                 anim.SetBool("isSlider", false);
             }
-            else if(!WallJump.isSliding && rb.velocity.y < 0)
+            else if(!WallJump.isSliding && !isClimbing && rb.velocity.y < 0)
             {
                
                 anim.SetBool("isJumping", false);
@@ -118,15 +119,7 @@ public class PlayerController : MonoBehaviour
             gc.nJumping = 1;
         }
 
-        //More gravity on the jump fall and WallJump
-        if (rb.velocity.y > 0 && Dash._isDashing == false)
-        {
-            rb.gravityScale = gravityScale;
-        }
-        else if(rb.velocity.y < 0 && Dash._isDashing == false)
-        {
-            rb.gravityScale = fallGravityScale;
-        }
+        GravityController();
     }
 
     void Flip()
@@ -168,6 +161,7 @@ public class PlayerController : MonoBehaviour
             }else if (Input.GetAxisRaw("Horizontal") != 0)
             {
                 isClimbing = false;
+                gc.isJumping = false;
             }
 
         }
@@ -179,18 +173,57 @@ public class PlayerController : MonoBehaviour
         if (isClimbing && hitInfo.collider != null)
         {
             float moveY = Input.GetAxisRaw("Vertical");
+            anim.Play("Ladders_Animation");
+            anim.SetBool("isJumping", false);
+            anim.SetBool("isFall", false);
             rb.velocity = new Vector2(rb.velocity.x,moveY *speedY);
             rb.gravityScale = 0f;
         }
-        else
+        else if(!isClimbing && gc.isGround && hitInfo.collider != null && Input.GetAxisRaw("Horizontal") != 0)
         {
-            rb.gravityScale = gravityScale;
+            //Animacao de idle ou andar
+            anim.SetBool("isWalking", true);
+            anim.SetBool("isJumping", false);
+            anim.SetBool("isFall", false);
         }
+        else if(!isClimbing && gc.isGround && hitInfo.collider != null && Input.GetAxisRaw("Horizontal") == 0)
+        {
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isJumping", false);
+            anim.SetBool("isFall", false);
+
+        }else if (!isClimbing && !gc.isGround && hitInfo.collider != null && !gc.isJumping)
+        {
+            //Aqui ta caindo no pulo na escada e quando eu me movimento nela
+            anim.SetBool("isFall", true);
+            anim.SetBool("isJumping", false);
+            anim.SetBool("isWalking",false);
+        }
+
+        
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, Vector2.up * distanceRayLa);
+    }
+
+    void GravityController()
+    {
+        if (rb.velocity.y == 0 && Dash._isDashing == false && isClimbing == false)
+        {
+            rb.gravityScale = fallGravityScale;
+        }
+
+        //More gravity on the jump fall and WallJump
+        if (rb.velocity.y > 0 && Dash._isDashing == false)
+        {
+            rb.gravityScale = gravityScale;
+        }
+        else if (rb.velocity.y < 0 && Dash._isDashing == false)
+        {
+            rb.gravityScale = fallGravityScale;
+        }
     }
 }

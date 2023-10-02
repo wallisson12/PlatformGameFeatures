@@ -13,15 +13,44 @@ public class Dash : MonoBehaviour
 
     [Header("Reference Player")]
     [SerializeField] private PlayerController p;
-    
+
+    [Header("Dash Particle")]
+    [SerializeField] private ParticleSystem dashParticle;
+    [SerializeField] private ParticleSystem.MainModule mainModule;
+    [SerializeField] private ParticleSystemRenderer renderParticle;
+    [SerializeField] private float timeParticle;
+
     void Start()
     {
         p = FindObjectOfType<PlayerController>();
+        mainModule = dashParticle.main;
+        renderParticle = dashParticle.GetComponent<ParticleSystemRenderer>();
+        dashParticle.Stop();
     }
 
     void Update()
     {
+        timeParticle += Time.deltaTime;
+
+        if (timeParticle > 1f)
+        {
+            timeParticle = 1f;
+        }
+
         Dashh();
+
+        //Particle Direction
+        if (p.direcao > 0 && _isDashing == false && TimeParticle())
+        {
+            mainModule.startSpeed = 10f;
+            renderParticle.flip = Vector3.zero;
+            
+        }
+        else if(p.direcao < 0 && _isDashing == false && TimeParticle())
+        {
+            mainModule.startSpeed = -10f;
+            renderParticle.flip = Vector3.right;
+        }
     }
 
     void Dashh()
@@ -43,6 +72,8 @@ public class Dash : MonoBehaviour
             p.rb.gravityScale = 0f;
             p.rb.velocity = Vector2.zero;
             p.anim.Play("Dash_Animation");
+            dashParticle.Play();
+            timeParticle = 0f;
             _isDashing = true;
             _canDash = false;
             Invoke("SetDashingFalse", _dashDuration);
@@ -57,7 +88,19 @@ public class Dash : MonoBehaviour
 
     void SetDashingFalse()
     {
-        p.rb.gravityScale = p.gravityScale;
         _isDashing = false;
+        dashParticle.Stop();
+    }
+
+    bool TimeParticle()
+    {
+        if (timeParticle == 1f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
