@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
+    public bool isJumping;
     public int nJumping;
     public bool isGround;
 
@@ -14,6 +15,7 @@ public class GroundCheck : MonoBehaviour
         {
             nJumping = 1;
             isGround = true;
+            isJumping = false;
         }
     }
 
