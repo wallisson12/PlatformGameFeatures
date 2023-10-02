@@ -274,6 +274,7 @@ MonoBehaviour:
   p: {fileID: 0}
   dashParticle: {fileID: 1768663011}
   renderParticle: {fileID: 0}
+  timeParticle: 0
 --- !u!1 &36016006
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,6 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47e13a2536fcfc040b7bd999e0ddb09e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isJumping: 0
   nJumping: 0
   isGround: 0
 --- !u!1 &1747310249
@@ -6218,7 +6220,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.7830189, g: 0.74860996, b: 0.28439835, a: 0.22745098}
+  m_Color: {r: 0.7830189, g: 0.74860996, b: 0.28439835, a: 0.54509807}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
